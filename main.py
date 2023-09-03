@@ -1,3 +1,5 @@
+#pylint:disable=W0702
+#pylint:disable=E0102
 import os
 from pyrogram import Client, filters
 from pyrogram.errors import FloodWait
@@ -16,7 +18,6 @@ from bs4 import BeautifulSoup as b
 
 import io
 import time
-from time import sleep
 import random
 
 URL = 'https://www.anekdot.ru/last/good/'
@@ -35,6 +36,12 @@ api_hash = "07fca730186bb632bcb8e4f78302a84c"
 app = Client("my_account", api_id=api_id, api_hash=api_hash)
 schid = [-1001396952381]
 
+@app.on_message(filters.command("мем",prefixes="."))
+def mem(_,message):
+	file = open(f"{os.getcwd()}/ids/memes/1.txt")
+	message.reply_document(file.read())
+	
+	
 @app.on_message(filters.command("channel",prefixes="."))
 def channe(_,message):
 	message.reply(app.get_chat(-1001874029811))
@@ -87,7 +94,7 @@ def da(_, message):
 	message.reply_sticker(random.choice([ "CAACAgIAAxkBAAEJLAtkd6HWbyIH9f8Lys3A1QfPaG4uHgACzjEAAi6EuUv_ywzxqqyoii8E"]))
 	
 @app.on_message(filters.command("принт",prefixes="."))
-def print(_,message):
+def prent(_,message):
 	ortxt = list(message.text.split(".принт ",maxsplit=1)[1])
 	tbp = []
 	l = -1
@@ -111,67 +118,6 @@ def print(_,message):
 	for i in ortxt:
 		ptbp += str(i)
 	message.edit(ortxt)
-	
-@app.on_message(filters.command("пр",prefixes="."))
-def prnt(_,message):
-	ortxt = list(message.text.split(".пр ",maxsplit=1)[1])
-	tbp = []
-	l = -1
-	rtbp = "#"
-	for i in ortxt:
-		tbp+=["#"]
-		l += 1
-	while tbp != ortxt:
-		try:
-			r = random.randint(0,l)
-			tbp[r] = ortxt[r] 
-			for i in tbp:
-				rtbp += i
-			message.edit(rtbp)
-			rtbp =""
-			time.sleep(0.01)
-		except:
-			a = 1
-			rtbp =""
-	ptbp =""
-	for i in ortxt:
-		ptbp += str(i)
-	message.edit(ptxt)
-		
-	
-##.#
-@app.on_message(filters.command("#",prefixes="")& filters.me)
-def resh(_,message):
-	mes =rmt = message.text.split("# ",maxsplit=1)[1]
-	ls = -1
-	tbp = "#"
-	for i in mes:
-		tbp += "#"
-		ls += 1
-	message.edit(tbp)
-	ntbp = ""
-	mes = list(mes)
-	tbp = list(tbp)
-	while tbp != rmt:
-		for i in range(ls):
-			if random.randint(1,4) == 3:
-				tbp[i] = mes[i]
-				mess = []
-				for i in tbp:
-					mess += i
-				tbpp = []
-				for i in tbp:
-					tbpp += [i]
-				ms = []
-				for i in mes:
-					ms += [i]
-				mes = ms
-				tbpp = tbp
-				mees = ""
-				for messs in mess:
-					mees += messs
-	message.edit(rmt)
-		
 	
 	##вентилятор
 @app.on_message(filters.command("вентилятор", prefixes=""))
@@ -264,6 +210,17 @@ def spm(_,message):
 		app.send_sticker(reply_to_message_id=mid, chat_id=cid, sticker=sid)
 		app.delete_messages(cid,mesid)
 		
+def de(tittle):
+	output =""
+	for i in tittle:
+		output+=chr(ord(i)+200)
+	return output
+
+def en(tittle):
+	output =""
+	for i in tittle:
+		output+=chr(ord(i)-200)
+	return output
 				
 								
 	##ладно
@@ -554,44 +511,13 @@ def spam(_,message):
 	for i in tbc:
 		tbs+= i
 	for i in range(d):
-		app.send_message(message.chat.id,tbs)
-
-@app.on_message(filters.command("рспам",prefixes=".") & filters.me)
-def spam(_,message):
-	app.delete_messages(message.chat.id,message.id)
-	a = [0]
-	b = 1
-	c = 0
-	d = ""
-	chis = message.text.split(".рспам ",maxsplit=1)[1]
-	for i in chis:
 		try:
-			a += [int(i)*b]
-			c += 1
+			app.send_message(reply_to_message_id=message.reply_to_message.id, chat_id=message.chat.id, text=tbs)
 		except:
-			break
-	for i in a:
-		d += str(i)
-	d = int(d)
-	tbs = ""
-	tbc = list(message.text)
-	for i in range(8+c):
-		tbc[i] =""
-	for i in tbc:
-		tbs+= i
-	for i in range(d):
-		app.send_message(reply_to_message_id=message.reply_to_message.id, chat_id=message.chat.id, text=tbs)
-@app.on_message(filters.command("logging",prefixes=".") & filters.me)
-def to_log(_,message):
-	global logging
-	if logging==0:
-		logging=1
-		message.edit("✅")
-	elif logging == 1:
-		logging =0
-		message.edit("❌")
-	time.sleep(0.5)
-	app.delete_messages(message.chat.id,message.id)
+			app.send_message(message.chat.id,tbs)
+
+		
+
 ## логгинг
 
 @app.on_message(filters.command("json",prefixes="."))
@@ -603,10 +529,23 @@ def json(_,message):
 			message.reply(message.reply_to_message)
 		except:
 			try:
-				os.system(f"echo {message.reply_to_message}")
+				print("{message.reply_to_message}")
 			except:
 				pass
 logging = 1
+
+@app.on_message(filters.command("logging",prefixes=".") & filters.me)
+def to_log(_,message):
+	global logging
+	if logging==0:
+		logging=1
+		message.edit("✅")
+	elif logging == 1:
+		logging =0
+		message.edit("❌")
+	time.sleep(0.5)
+	app.delete_messages(message.chat.id,message.id)
+	
 @app.on_edited_message()
 def edtd(_,edited_message):
 	if logging == 1:
@@ -615,11 +554,7 @@ def edtd(_,edited_message):
 				file.write(f"\n{edited_message.from_user.username}[{edited_message.from_user.id}] изменил  сообщение[{edited_message.id}]:{edited_message.text},время изменения:{time.ctime()}")
 				
 		except:
-				try:
-					with open(f"{edited_message.chat.first_name}[{edited_message.chat.id}]/{edited_message.id}.txt", "w") as file:
-						file.write(f"{edited_message.from_user.username}[{edited_message.from_user.id}] отправил сообщение[{edited_message.id}]:{edited_message.text},время отправки:{time.ctime()}")
-				except:
-					os.system(f"mkdir {edited_message.chat.first_name}[{edited_message.chat.id}]")
+				pass
 	
 @app.on_message()
 def alls(_,message):
@@ -633,16 +568,13 @@ def alls(_,message):
 		f=0
 	if logging==1:
 		try:
-			with open(f"{message.chat.first_name}[{message.chat.id}]/{message.id}.txt", "a") as file:
+			with open(f"{message.chat.first_name}[{message.chat.id}]/{message.id}.txt", "w") as file:
 				file.write(f"\n{message.from_user.username}[{message.from_user.id}] отправил сообщение[{message.id}]:{message.text},время отправки:{time.ctime()}")
 				
 		except:
-				try:
-					message.print("___")
-					with open(f"{message.chat.first_name}[{message.chat.id}]/{message.id}.txt", "w") as file:
-						file.write("{message.from_user.username}[{message.from_user.id}] отправил сообщение[{message.id}]:{message.text},время отправки:{time.ctime()}")
-				except:
-					os.system(f"mkdir {message.chat.first_name}[{message.chat.id}]")
+				os.system(f"mkdir {message.chat.first_name}[{message.chat.id}]")
+				with open(f"{message.chat.first_name}[{message.chat.id}]/{message.id}.txt", "w") as file:
+					file.write(f"\n{message.from_user.username}[{message.from_user.id}] отправил сообщение[{message.id}]:{message.text},время отправки:{time.ctime()}")
 				
 	#app.update_profile(bio=time.ctime())
 	try:
