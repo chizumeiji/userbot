@@ -2,32 +2,46 @@
 #pylint:disable=E0102
 import os
 from pyrogram import Client, filters
-from pyrogram.errors import FloodWait
 
-from pyrogram.types import ChatPermissions
-import pyrogram
-
-from PIL import Image
 from pyrogram.raw.functions.messages import GetStickerSet
 
 from pyrogram.raw.types import InputStickerSetShortName
 from pyrogram.types import Sticker
 
-import requests
-from bs4 import BeautifulSoup as b
-
-import io
 import time
 import random
-
-URL = 'https://www.anekdot.ru/last/good/'
-def parser(url):
-	r = requests.get(url)
-	soup = b(r.text, 'html.parser')
-	anekdots = soup.find_all('div', class_='text')
-	return [c.text for c in anekdots]
-list_of_jokes = parser (URL)
-random.shuffle (list_of_jokes)
+def parser(a):
+	z =0
+	a =random.randint(0,1)
+	if a ==0:
+		while z!=2:
+			try:
+				anek = app.get_messages(-1001574767565,random.randint(1,2102))
+				try:
+					a = anek.entities.url
+				except:
+					z =1
+				if len(anek.text)> 1:
+					if z ==1:
+						return anek.text
+						z=2
+			except:
+				pass
+	elif a==1:
+		while z!=2:
+			try:
+				anek = app.get_messages(-1001966027405,random.randint(1,484))
+				try:
+					a = anek.entities.url
+				except:
+					z =1
+				if len(anek.text)> 1:
+					if z ==1:
+						return anek.text
+						z=2
+			except:
+				pass
+		
 	
 
 api_id = 19576945
@@ -57,33 +71,13 @@ def aut(_,message):
 	app.delete_messages(cid,mid)
 
 @app.on_message(filters.command("анекдот",prefixes="."))
-def anek(_,message):
-	message.reply(random.choice(parser(URL)))
+def anik(_,message):
+	message.reply(parser(1))
 	
 @app.on_message(filters.command("тю",prefixes=""))
 def tyu(_,message):
 	message.reply("тю")
 
-@app.on_message(filters.command("grid",prefixes=".") & filters.me)
-def process_image(client, message):
-    original_image = client.download_media(message.reply_to_message)
-    image = Image.open(original_image)
-    square_size = image.size[0] // 5
-    cropped_images = []
-    for i in range(5):
-        for j in range(5):
-            left = j * square_size
-            top = i * square_size
-            right = (j + 1) * square_size
-            bottom = (i + 1) * square_size
-            cropped_image = image.crop((left, top, right, bottom))
-            cropped_images.append(cropped_image)
-    for cropped_image in cropped_images:
-        output_buffer = io.BytesIO()
-        cropped_image.save(output_buffer, format="PNG")
-        output_buffer.seek(0)
-        client.send_photo(chat_id=message.chat.id, photo=output_buffer)
-    os.remove(original_image)
 
 
 
@@ -112,7 +106,6 @@ def prent(_,message):
 			rtbp =""
 			time.sleep(0.01)
 		except:
-			a = 1
 			rtbp =""
 	ptbp =""
 	for i in ortxt:
@@ -129,8 +122,7 @@ def da(_, message):
 @app.on_message(~filters.me & filters.command("да", prefixes="") & filters.private)
 def da(_, message):
 	if message.text == "да":
-		if message.chat.id != -1001557590309 and message.chat.id != -1001477515884:
-			message.reply_sticker(random.choice([ "CAACAgIAAxkBAAEJKohkd0YSFsu0NZ0Ji2bzRAKjdmwv-QAC0yoAAj9yuEvoq4wLPNjjxS8E"]))
+		message.reply_sticker(random.choice([ "CAACAgIAAxkBAAEJKohkd0YSFsu0NZ0Ji2bzRAKjdmwv-QAC0yoAAj9yuEvoq4wLPNjjxS8E"]))
 		
 		##е
 @app.on_message(filters.command("е",prefixes="")|filters.command("e",prefixes=""))
@@ -163,7 +155,28 @@ def izbt(_,message):
 		app.send_sticker(reply_to_message_id=mid, chat_id=cid, sticker=sid)
 		app.delete_messages(cid,mesid)
 
-		
+sticks = ['nebagibuappu_by_fStikBot','kitski2023_by_fStikBot', 'kitski23_by_fStikBot','kitttens20232_by_fStikBot', 'kitski202310_by_fStikBot', 'kitttens20234_by_fStikBot', 'kitttens20235_by_fStikBot', 'kitttens20236_by_fStikBot', 'kitttens20237_by_fStikBot', 'kitten202315_by_fStikBot', 'kitten202316_by_fStikBot', 'kitten202317_by_fStikBot', 'kitten202318_by_fStikBot', 'kitten202319_by_fStikBot', 'kitten202320_by_fStikBot', 'kitten202321_by_fStikBot', 'kitten202322_by_fStikBot', 'kitten202323_by_fStikBot',]
+@app.on_message(filters.command(["кот","кіт"],prefixes="."))
+async def hello(_, message):
+    try:
+        # print(message)
+        
+        if 1==1:
+            sticker_set = await app.invoke(
+                GetStickerSet(
+                    stickerset=InputStickerSetShortName(short_name=random.choice(sticks)),
+                    hash=0
+                )
+            )
+            sticker = random.choice(sticker_set.documents)
+            if message.chat.id != -1001862327325:
+            	await app.send_sticker(message.chat.id, sticker=(
+             	   await Sticker._parse(app, sticker, {type(i): i for i in sticker.attributes})).file_id,
+                                   reply_to_message_id=message.id)
+
+             	
+    except Exception as e:
+        print(e)		
 		
 		##шок
 @app.on_message(filters.command("ужс",prefixes=".") & filters.me | filters.command("шок",prefixes=".") & filters.me)
@@ -347,7 +360,7 @@ def id(_,message):
 		yid= message.reply_to_message.from_user.id
 		iddata = f"ваш ид: `{myid}` \nего ид:`{yid}`"
 		try:
-			sid= message.sticker.file_id
+			sid= message.reply_to_message.sticker.file_id
 			iddata += "\nид стикера: ` {sid} `"
 		except:
 			f = 1
@@ -523,76 +536,49 @@ def spam(_,message):
 @app.on_message(filters.command("json",prefixes="."))
 def json(_,message):
 	try:
+		print("{message.reply_to_message}")
+	except:
+		pass
+	try:
 		message.edit(message.reply_to_message)
 	except:
 		try:
 			message.reply(message.reply_to_message)
 		except:
-			try:
-				print("{message.reply_to_message}")
-			except:
-				pass
-logging = 1
+			pass
 
-@app.on_message(filters.command("logging",prefixes=".") & filters.me)
-def to_log(_,message):
-	global logging
-	if logging==0:
-		logging=1
-		message.edit("✅")
-	elif logging == 1:
-		logging =0
-		message.edit("❌")
-	time.sleep(0.5)
-	app.delete_messages(message.chat.id,message.id)
-	
-@app.on_edited_message()
-def edtd(_,edited_message):
-	if logging == 1:
-		try:
-			with open(f"{edited_message.chat.first_name}[{edited_message.chat.id}]/{edited_message.id}.txt", "a") as file:
-				file.write(f"\n{edited_message.from_user.username}[{edited_message.from_user.id}] изменил  сообщение[{edited_message.id}]:{edited_message.text},время изменения:{time.ctime()}")
-				
-		except:
-				pass
-	
 @app.on_message()
 def alls(_,message):
-	global logging
 	try:
 		cid = message.chat.id
 		mid = message.id
-		uid = message.from_user.id
 		mt = message.text
 	except:
-		f=0
-	if logging==1:
-		try:
-			with open(f"{message.chat.first_name}[{message.chat.id}]/{message.id}.txt", "w") as file:
-				file.write(f"\n{message.from_user.username}[{message.from_user.id}] отправил сообщение[{message.id}]:{message.text},время отправки:{time.ctime()}")
-				
-		except:
-				os.system(f"mkdir {message.chat.first_name}[{message.chat.id}]")
-				with open(f"{message.chat.first_name}[{message.chat.id}]/{message.id}.txt", "w") as file:
-					file.write(f"\n{message.from_user.username}[{message.from_user.id}] отправил сообщение[{message.id}]:{message.text},время отправки:{time.ctime()}")
-				
-	#app.update_profile(bio=time.ctime())
+		pass
+	try:
+		uid = message.from_user.id
+	except:
+		pass
 	try:
 		r = open(f"{uid}-react.txt")
 		rid = r.read()
 		app.send_reaction(cid,mid,random.choice(rid))
 	except:
-		f =1
+		pass
 	try:
 		if message.sender_chat.id in schid:
-			message.reply_sticker("CAACAgIAAxkBAAEJschksfG3vkR2BpLRBDleMkCVD5Sb_AACiCoAAmkjqUl4U_fO0M-mvi8E")
+			message.reply_sticker(f"CAACAgIAAxkBAAEJschksfG3vkR2BpLRBDleMkCVD5Sb_AACiCoAAmkjqUl4U_fO0M-mvi8E")
 	except:
-		f = 0
+		pass
+
+	#app.update_profile(bio=time.ctime())
+	
+	
 	try:
 		for word in mt:
 			if word.startswith("краб") or word.endwith("краб") or word.startswith("rust") or word.starswith("раст"):
 				message.reply_sticker(random.choice([]))
 	except:
-		f=0
+		pass
 
 app.run()
